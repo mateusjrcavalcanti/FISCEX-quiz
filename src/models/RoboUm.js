@@ -8,11 +8,6 @@ export default function RoboUm({ ...props }) {
   const { nodes, /*materials,*/ animations } = useGLTF(ModelPath);
   const { actions } = useAnimations(animations, group);
 
-  useEffect(() => {
-    console.log(actions);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const tras = () => {
     group.current.position.z -= 0.1;
     group.current.rotation.y = Math.PI / 1;
@@ -32,10 +27,16 @@ export default function RoboUm({ ...props }) {
 
   useFrame((state) => {
     const diferencaZ =
-      Math.round(group.current.position.z) - Math.round(props.goToPosition[2]);
+      props.goToPosition && props.goToPosition[2]
+        ? Math.round(group.current.position.z) -
+          Math.round(props.goToPosition[2])
+        : undefined;
     const diferencaX =
-      Math.round(group.current.position.x) - Math.round(props.goToPosition[0]);
-    if (diferencaZ !== 0) {
+      props.goToPosition && props.goToPosition[0]
+        ? Math.round(group.current.position.x) -
+          Math.round(props.goToPosition[0])
+        : undefined;
+    if (diferencaZ && diferencaZ !== 0) {
       if (diferencaX === 0) {
         if (diferencaZ > 0) tras();
         if (diferencaZ < 0) frente();
@@ -59,7 +60,7 @@ export default function RoboUm({ ...props }) {
         }
       }
     } else {
-      if (diferencaX !== 0) {
+      if (diferencaX && diferencaX !== 0) {
         if (diferencaX > 0) direita();
         if (diferencaX < 0) esquerda();
       }

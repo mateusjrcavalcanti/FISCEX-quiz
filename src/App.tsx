@@ -77,8 +77,7 @@ function App() {
         state: "perguntando",
         jogadorAtivo: "jogadorUm",
         pergunta: getRandomArbitrary(0, perguntas.length),
-      });
-      console.log("-->Jogo iniciou");
+      });     
       toast("Jogo iniciado!", {
         icon: "🤖",
       });
@@ -100,11 +99,14 @@ function App() {
             state: "acabou",
             jogadorAtivo: jogadorVencedor,
           });
-          toast(`O jogador ${
-            jogadorVencedor === "jogadorUm" ? "Um" : "Dois"
-          } venceu!`, {
-            icon: "🏆",
-          });
+          toast(
+            `O jogador ${
+              jogadorVencedor === "jogadorUm" ? "Um" : "Dois"
+            } venceu!`,
+            {
+              icon: "🏆",
+            }
+          );
         } else {
           setGame({
             ...game,
@@ -116,13 +118,7 @@ function App() {
         }
         return;
       } else {
-        perguntas.splice(perguntas.indexOf(perguntas[game.pergunta]), 1);
-        /*console.log(
-          "--> Perguntando, uma pergunta foi removida: " +
-            totalperguntas +
-            "-1= " +
-            perguntas.length
-        );*/
+        perguntas.splice(perguntas.indexOf(perguntas[game.pergunta]), 1);       
         return;
       }
     }
@@ -147,44 +143,41 @@ function App() {
       }
       return;
     }
-    if (game.state === "acabou") {
-      /*console.log(
-        "--> Placar: Jogador 01: " +
-          (game.casaUm + 1) +
-          " Jogador 02: " +
-          (1 + game.casaDois)
-      );*/
+    if (game.state === "acabou") {      
       return;
     }
     if (game.state === "movimentar") {
-      const andar = getRandomArbitrary(1, 6);
+      const andar = getRandomArbitrary(1, 6);     
       let casaUm = game.casaUm;
-      let casaDois = game.casaDois;
-      console.log("--> " + game.jogadorAtivo + " andou " + andar);
+      let casaDois = game.casaDois;      
       toast(`Ande ${andar} ${andar > 1 ? "casas" : "casa"}`, {
         icon: "🎲",
       });
 
       if (game.jogadorAtivo === "jogadorUm") {
         casaUm += andar;
+        let goToPosition = Posicoes[casaUm];
+        if(casaUm > Posicoes.length) goToPosition = Posicoes[Posicoes.length - 1]
         setJogadorUm({
           ...jogadorUm,
           action: {
             name: "Walking",
             props: { repetitions: 10000000, clampWhenFinished: false },
           },
-          goToPosition: Posicoes[casaUm],
+          goToPosition,
         });
       }
       if (game.jogadorAtivo === "jogadorDois") {
         casaDois += andar;
+        let goToPosition = Posicoes[casaDois];
+        if(casaDois > Posicoes.length) goToPosition = Posicoes[Posicoes.length - 1]
         setJogadorDois({
           ...jogadorDois,
           action: {
             name: "Walking",
             props: { repetitions: 10000000, clampWhenFinished: false },
           },
-          goToPosition: Posicoes[casaDois],
+          goToPosition,
         });
       }
 
@@ -208,6 +201,7 @@ function App() {
         });
         if (
           jogadorUm.currentPosition &&
+          jogadorUm.goToPosition &&
           Math.round(jogadorUm.currentPosition[0]) ===
             Math.round(jogadorUm.goToPosition[0]) &&
           Math.round(jogadorUm.currentPosition[2]) ===
@@ -230,6 +224,7 @@ function App() {
             //Chegou na casa
           } else if (
             jogadorUm.currentPosition &&
+          jogadorUm.goToPosition &&
             Math.round(jogadorUm.currentPosition[0]) ===
               Math.round(Posicoes[Posicoes.length - 1][0]) &&
             Math.round(jogadorUm.currentPosition[2]) ===
@@ -239,14 +234,19 @@ function App() {
               ...game,
               state: "acabou",
             });
-            console.log("acabou");
+            setJogadorUm({
+              ...jogadorUm,
+              action: {
+                name: "Dance",
+                props: { repetitions: 10000000, clampWhenFinished: false },
+              },
+            });
             return;
           } else {
             setGame({
               ...game,
               state: "sentar",
-            });
-            console.log("sentou");
+            });            
             return;
           }
         }
@@ -292,14 +292,19 @@ function App() {
               ...game,
               state: "acabou",
             });
-            console.log("acabou");
+            setJogadorDois({
+              ...jogadorDois,
+              action: {
+                name: "Dance",
+                props: { repetitions: 10000000, clampWhenFinished: false },
+              },
+            });
             return;
           } else {
             setGame({
               ...game,
               state: "sentar",
-            });
-            console.log("sentou");
+            });            
             return;
           }
         }
@@ -307,9 +312,7 @@ function App() {
     }
     if (game.state === "sentar") {
       //Deixar o boneco sentado esperando o outro
-      if (game.jogadorAtivo === "jogadorDois") {
-        console.log("--> Jogador 2 sentou e Jogador 1 está de pé");
-        console.log("\n");
+      if (game.jogadorAtivo === "jogadorDois") {       
         setJogadorDois({
           ...jogadorDois,
           action: {
@@ -325,10 +328,7 @@ function App() {
           },
         });
       }
-      if (game.jogadorAtivo === "jogadorUm") {
-        console.log("--> Jogador 1 sentou e Jogador 2 está de pé");
-        console.log("\n");
-
+      if (game.jogadorAtivo === "jogadorUm") {   
         setJogadorUm({
           ...jogadorUm,
           action: {
@@ -364,8 +364,7 @@ function App() {
             name: "Death",
             props: { repetitions: 1, clampWhenFinished: true },
           },
-        });
-        console.log("--> Jogador 1 caiu na casa " + (game.casaUm + 1));
+        });        
         sleep(2000).then(() => {
           setJogadorUm({
             ...jogadorUm,
@@ -386,8 +385,7 @@ function App() {
             name: "Death",
             props: { repetitions: 1, clampWhenFinished: true },
           },
-        });
-        console.log("--> Jogador 2 caiu na casa " + (game.casaDois + 1));
+        });        
         sleep(2000).then(() => {
           setJogadorDois({
             ...jogadorDois,
@@ -429,8 +427,7 @@ function App() {
             ...jogadorDois,
             initialPosition: [-4, -0.1, -25],
             goToPosition: [-4, -0.1, -25],
-          });
-          console.log("--> Jogador 1 matou o Jogador 2");
+          });         
           setGame({
             ...game,
             state: "sentar",
@@ -460,8 +457,7 @@ function App() {
             ...jogadorUm,
             initialPosition: [-4, -0.1, -25],
             goToPosition: [-4, -0.1, -25],
-          });
-          console.log("--> Jogador 2 matou o Jogador 1");
+          });          
           setGame({
             ...game,
             state: "sentar",
@@ -471,7 +467,6 @@ function App() {
       }
       return;
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game, jogadorUm.currentPosition, jogadorDois.currentPosition]);
 

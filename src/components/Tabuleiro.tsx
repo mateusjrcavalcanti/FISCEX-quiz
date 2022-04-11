@@ -60,7 +60,10 @@ export function GeraTabuleiro() {
   const list7 = addBase(1, "tras", "red", position);
 
   position = list7.posicao;
-  const list9 = addBase(7, "tras", "black", position);
+  const list8 = addBase(6, "tras", "black", position);
+
+  position = list8.posicao;
+  const list9 = addBase(1, "tras", "yellow", position);
 
   BaseComponents.push(list1.basesgeradas);
   BaseComponents.push(list2.basesgeradas);
@@ -69,6 +72,7 @@ export function GeraTabuleiro() {
   BaseComponents.push(list5.basesgeradas);
   BaseComponents.push(list6.basesgeradas);
   BaseComponents.push(list7.basesgeradas);
+  BaseComponents.push(list8.basesgeradas);
   BaseComponents.push(list9.basesgeradas);
 
   const Posicoes = [].concat(
