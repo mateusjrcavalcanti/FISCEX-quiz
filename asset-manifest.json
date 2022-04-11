@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/FISCEX-quiz/static/css/main.b7eed9dc.css",
+    "main.js": "/FISCEX-quiz/static/js/main.b7a955a9.js",
+    "static/media/RobotExpressive1.glb": "/FISCEX-quiz/static/media/RobotExpressive1.06f9d5cfb2ed5af3e120.glb",
+    "static/media/RobotExpressive2.glb": "/FISCEX-quiz/static/media/RobotExpressive2.06f9d5cfb2ed5af3e120.glb",
+    "static/media/clipart2250767.png": "/FISCEX-quiz/static/media/clipart2250767.a242a92eb4dcc13685c6.png",
+    "index.html": "/FISCEX-quiz/index.html",
+    "main.b7eed9dc.css.map": "/FISCEX-quiz/static/css/main.b7eed9dc.css.map",
+    "main.b7a955a9.js.map": "/FISCEX-quiz/static/js/main.b7a955a9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b7eed9dc.css",
+    "static/js/main.b7a955a9.js"
+  ]
+}
